@@ -20,35 +20,6 @@
 
 
 #########################################################################################
-####################################### VARIABLES #######################################
-#########################################################################################
-
-$PathSystem32 = "C:\Windows\System32\"
-
-# Separators
-$SeparatorInit = "################################# ---- "
-$SeparatorFin = " ---- #################################"
-
-$Hostname = $env:computername
-$Date_ddmmyyyy = Get-Date -Format "dd-MM-yyyy"
-
-# Store the full path
-$PathExtract = $StorePath + $Hostname + "_" + $Date_ddmmyyyy + "\"
-
-# Timestamp + Hostname on file names
-# Format: [filename]_Hostname_01/12/2020[extension]
-$FormatFile = "_" + $Hostname + "_" + $Date_ddmmyyyy
-
-# Create file name in path
-$PathFile = $StorePath + $Hostname + "_" + $Date_ddmmyyyy + ".zip"
-
-# Point de départ archive
-$PathFilePoint = $PathExtract + "*"
-
-# Get username
-$User = $env:USERNAME
-
-#########################################################################################
 ####################################### FUNCTIONS #######################################
 #########################################################################################
 
@@ -110,6 +81,7 @@ function CollectInfo {
 
 ################ SCRIPT END ################
 Function ScriptEnd{# Compression in file ZIP
+    Write-Host "[!] Compressing data" -ForegroundColor Yellow
     try{
         $compress = @{
             Path = $PathFilePoint
@@ -198,6 +170,33 @@ else{
     exit
 }
 
+################ PATHS VARIABLES ################
+
+$PathSystem32 = "C:\Windows\System32\"
+
+# Separators
+$SeparatorInit = "################################# ---- "
+$SeparatorFin = " ---- #################################"
+
+$Hostname = $env:computername
+$Date_ddmmyyyy = Get-Date -Format "dd-MM-yyyy"
+
+# Store the full path
+$PathExtract = $StorePath + $Hostname + "_" + $Date_ddmmyyyy + "\"
+
+# Timestamp + Hostname on file names
+# Format: [filename]_Hostname_01/12/2020[extension]
+$FormatFile = "_" + $Hostname + "_" + $Date_ddmmyyyy
+
+# Create file name in path
+$PathFile = $StorePath + $Hostname + "_" + $Date_ddmmyyyy + ".zip"
+
+# Point de départ archive
+$PathFilePoint = $PathExtract + "*"
+
+# Get username
+$User = $env:USERNAME
+
 ################ AV CHECKS ################
 # Verification of Microsoft Defender
 Write-Host "
@@ -241,6 +240,7 @@ if ( $DefenderService -eq "Stopped" -or $DefenderDisabled -eq $false ) {
     while ($ResponseHiveCollect -ne 'y' -and $ResponseHiveCollect -ne 'n')
     Write-Host ""
 }
+
 #########################################################################################
 ######################################## SCRIPT #########################################
 #########################################################################################
@@ -260,7 +260,7 @@ TryCheck -Command $Command -Log "Moving to system32 folder" -IsInformational "ye
 
 # Creation of the folder where the logs will be stored
 $Command = { New-Item -ItemType directory -Path "$PathExtract\REGS" | Out-String > $null 2>&1 }
-TryCheck -Command $Command -Log "Creating the destination folder : $PathExtract\REGS" -IsInformational "no" -IgnoreError "no"
+TryCheck -Command $Command -Log "Creating the destination folder : ${PathExtract}REGS" -IsInformational "no" -IgnoreError "no"
 
 CollectEvents -Events "Application" -FileName "Application"
 CollectEvents -Events "Security" -FileName "Security"
@@ -403,7 +403,7 @@ Write-Host "[!] Collecting hives of host" -ForegroundColor Yellow
 
 # Creation of the folder where the logs will be stored
 $Command = { New-Item -ItemType directory -Path "$PathExtract\HIVES" | Out-String > $null 2>&1 }
-TryCheck -Command $Command -Log "Creating the destination folder : $PathExtract\HIVES" -IsInformational "no" -IgnoreError "no"
+TryCheck -Command $Command -Log "Creating the destination folder : ${PathExtract}HIVES" -IsInformational "no" -IgnoreError "no"
 
 function CollectHive {
     param (
