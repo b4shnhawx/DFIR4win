@@ -20,63 +20,8 @@
 
 
 #########################################################################################
-####################################### INITIATION #######################################
-#########################################################################################
-
-Write-Host "
-    ____  ______________  __ __          _     
-   / __ \/ ____/  _/ __ \/ // /_      __(_)___ 
-  / / / / /_   / // /_/ / // /| | /| / / / __ \
- / /_/ / __/ _/ // _, _/__  __/ |/ |/ / / / / /
-/_____/_/   /___/_/ |_|  /_/  |__/|__/_/_/ /_/ 
-
-"
-$ErrorActionPreference= 'silentlycontinue'
-
-# Verification of admin
-$IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-
-if ( $IsAdmin -eq $true ){
-    Write-Host "[+] Administrator" -ForegroundColor Green
-}
-else{
-    Write-Host "[-] Administrator" -ForegroundColor Red
-    exit
-}
-
-# Verification of Microsoft Defender
-Write-Host "
-[!] To pick up the hives from the system you will need to disable the real-time protection of Microsoft Defender.
-[!] If Microsoft Defender is not disabled, the script will skip the collection of the hives.
-[!] In case you have another antivirus (AV) it is possible that the script will not detect it. Make sure to disable real-time protection.
-[!] If it is another AV and it is not disabled, it is possible that some, but not all, of the hives will be collected. The antivirus will only block the collection of some of the hives, but the script will extract the rest of the information.
-[!] If you want to collect ALL hives, be sure to disable protection NOW.
-" -ForegroundColor Yellow
-
-Read-Host "Press ENTER to continue"
-
-$DefenderDisabled = ((Get-MpPreference).DisableRealtimeMonitoring)
-if ( $DefenderDisabled -eq $true ){
-    Write-Host "[+] Microsoft Defender disabled" -ForegroundColor Green
-}
-else{
-    Write-Host "[-] Microsoft Defender disabled" -ForegroundColor Red
-}
-
-#########################################################################################
 ####################################### VARIABLES #######################################
 #########################################################################################
-
-Write-Host "[!] The extraction will be stored in a folder containing the job name and the current date." -ForegroundColor Yellow
-Write-Host "[!] This folder will then be compressed into a ZIP archive and deleted." -ForegroundColor Yellow
-$StorePath = Read-Host "Absolute path where to store the extraction? [Example = D:\ ] "
-
-# Add backslash if not already present
-if ($StorePath -and $StorePath[-1] -ne "\") {
-    $StorePath = $StorePath + "\"
-} else {
-    $StorePath = "C:\"
-}
 
 $PathSystem32 = "C:\Windows\System32\"
 
@@ -156,7 +101,7 @@ function CollectInfo {
     )
 
     $Commands = {
-        echo "$SeparatorInit$InfoType$SeparatorFin" | Out-File -Append $HostInfoPath
+        Write-Output "$SeparatorInit$InfoType$SeparatorFin" | Out-File -Append $HostInfoPath
         & $CommandBlock | Out-File -Append $HostInfoPath
     }
 
@@ -180,7 +125,7 @@ Function ScriptEnd{# Compression in file ZIP
 
     # Delete folder
     try{
-        cd ../
+        Set-Location ../
         Remove-Item $PathExtract -Recurse -Force -Confirm:$false
         Write-Host "[+] Supression : $PathExtract" -ForegroundColor Green
     }
@@ -199,17 +144,51 @@ Function ScriptEnd{# Compression in file ZIP
         Write-Host "[!] Don't forget to re-enable real-time protection!" -ForegroundColor Yellow
     }
 
-    cd $PSScriptRoot
+    Set-Location $PSScriptRoot
 
     exit
 }
 
 #########################################################################################
-######################################## SCRIPT #########################################
+####################################### INITIATION #######################################
 #########################################################################################
 
 ################ INIT ################
+Write-Host "
+    ____  ______________  __ __          _     
+   / __ \/ ____/  _/ __ \/ // /_      __(_)___ 
+  / / / / /_   / // /_/ / // /| | /| / / / __ \
+ / /_/ / __/ _/ // _, _/__  __/ |/ |/ / / / / /
+/_____/_/   /___/_/ |_|  /_/  |__/|__/_/_/ /_/ v1.1
 
+"
+$ErrorActionPreference= 'silentlycontinue'
+
+# Verification of admin
+$IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+
+if ( $IsAdmin -eq $true ){
+    Write-Host "[+] Administrator" -ForegroundColor Green
+}
+else{
+    Write-Host "[-] Administrator" -ForegroundColor Red
+    exit
+}
+
+Write-Host ""
+Write-Host "[!] The extraction will be stored in a folder containing the job name and the current date." -ForegroundColor Yellow
+Write-Host "[!] This folder will then be compressed into a ZIP archive and deleted." -ForegroundColor Yellow
+Write-Host ""
+$StorePath = Read-Host "Absolute path where to store the extraction? [ Example = D:\extraction\ ] [ Default = C:\ ] "
+
+# Add backslash if not already present
+if ($StorePath -and $StorePath[-1] -ne "\") {
+    $StorePath = $StorePath + "\"
+} else {
+    $StorePath = "C:\"
+}
+
+Write-Host ""
 # Check the path
 if ( Test-Path $StorePath){
     Write-Host "[+] Checking the path entered" -ForegroundColor Green
@@ -219,8 +198,56 @@ else{
     exit
 }
 
+################ AV CHECKS ################
+# Verification of Microsoft Defender
+Write-Host "
+[!] To pick up the hives from the system you will need to disable the real-time protection of Microsoft Defender.
+[!] If it is another AV and it is not disabled, it is possible that some, but not all, of the hives will be collected. The antivirus will only block the collection of some of the hives, but the script will extract the rest of the information.
+[!] If you want to collect ALL hives, be sure to disable protection NOW.
+" -ForegroundColor Yellow
+
+Read-Host "Press ENTER to continue"
+
+# Get if AV is disabled or not
+$DefenderDisabled = ((Get-MpPreference).DisableRealtimeMonitoring)
+if ( $DefenderDisabled -eq $true ){
+    Write-Host "[+] Microsoft Defender disabled" -ForegroundColor Green
+}
+elseif ( $DefenderDisabled -eq $false ){
+    Write-Host "[-] Microsoft Defender enabled" -ForegroundColor Red
+}
+
+# Get if AVservice is running or not. If not, probably there is another 3rd party AV running
+$DefenderService = ((Get-Service -Name WinDefend).Status)
+if ( $DefenderService -eq "Running" ){
+    Write-Host "[+] Microsoft Defender is the default antivirus" -ForegroundColor Green
+}
+elseif ( $DefenderService -eq "Stopped" ){
+    Write-Host "[-] Microsoft Defender is not the default antivirus: Ensure tod disable your AV" -ForegroundColor Red
+}
+else{
+    Write-Host "[-] Microsoft Defender unknown service status" -ForegroundColor Red
+}
+
+# If AV is enabled or there is another AV installed, ask if want to extract hives
+if ( $DefenderService -eq "Stopped" -or $DefenderDisabled -eq $false ) {
+    Write-Host ""
+    do {
+        $ResponseHiveCollect = Read-Host "Do you want to try to collect as many hives as possible? [ y / n ] "
+        if ($ResponseHiveCollect -ne 'y' -and $ResponseHiveCollect -ne 'n') {
+            Write-Host "Invalid input. Please enter 'y' or 'n'."
+        }
+    }
+    while ($ResponseHiveCollect -ne 'y' -and $ResponseHiveCollect -ne 'n')
+    Write-Host ""
+}
+#########################################################################################
+######################################## SCRIPT #########################################
+#########################################################################################
+
+################ INIT ################
 # Creation of the folder where the logs will be stored
-$Command = { $NoWriteOuput = New-Item -ItemType directory -Path "$PathExtract" | Out-String }
+$Command = { New-Item -ItemType directory -Path "$PathExtract" | Out-String > $null 2>&1 }
 TryCheck -Command $Command -Log "Creating the destination folder : $PathExtract" -IsInformational "no" -IgnoreError "no"
 
 
@@ -228,11 +255,11 @@ TryCheck -Command $Command -Log "Creating the destination folder : $PathExtract"
 Write-Host "[!] Collecting system events" -ForegroundColor Yellow
 
 # Move to system32
-$Command = { cd $PathSystem32 }
+$Command = { Set-Location $PathSystem32 }
 TryCheck -Command $Command -Log "Moving to system32 folder" -IsInformational "yes" -IgnoreError "no"
 
 # Creation of the folder where the logs will be stored
-$Command = { $NoWriteOuput = New-Item -ItemType directory -Path "$PathExtract\REGS" | Out-String }
+$Command = { New-Item -ItemType directory -Path "$PathExtract\REGS" | Out-String > $null 2>&1 }
 TryCheck -Command $Command -Log "Creating the destination folder : $PathExtract\REGS" -IsInformational "no" -IgnoreError "no"
 
 CollectEvents -Events "Application" -FileName "Application"
@@ -260,11 +287,11 @@ Write-Host "[!] Collecting information of host" -ForegroundColor Yellow
 Set-Content -Path $HostInfoPath -Value ""
 
 # Move to out path
-$Command = { cd $PathExtract }
+$Command = { Set-Location $PathExtract }
 TryCheck -Command $Command -Log "Moving to out path : ${PathExtract}" -IsInformational "yes" -IgnoreError "yes"
 
 $HostInfoPath = "${PathExtract}Host-Info${FormatFile}.txt"
-echo "${SeparatorInit} INDEX HOST INFO COLLECTED ${SeparatorFin}
+Write-Output "${SeparatorInit} INDEX HOST INFO COLLECTED ${SeparatorFin}
 - Date
 - Interfaces
 - Netstat port connection
@@ -309,14 +336,14 @@ CollectInfo -InfoType "Netstat port connection processes" -CommandBlock $Command
 
 # Running processes
 $CommandBlock = {
-    Get-Process | ft -auto
+    Get-Process | Format-Table -auto
 }
                                                 
 CollectInfo -InfoType "Running processeses" -CommandBlock $CommandBlock
 
 # Services list
 $CommandBlock = {
-    Get-Service | ft -auto
+    Get-Service | Format-Table -auto
 }
                                                 
 CollectInfo -InfoType "Services list" -CommandBlock $CommandBlock
@@ -351,7 +378,7 @@ CollectInfo -InfoType "Shared  SMB volumes" -CommandBlock $CommandBlock
 
 # Command history
 $CommandBlock = {
-    Get-History | ft -auto 
+    Get-History | Format-Table -auto 
 }
                                                 
 CollectInfo -InfoType "Command history" -CommandBlock $CommandBlock
@@ -365,15 +392,17 @@ CollectInfo -InfoType "Drivers list" -CommandBlock $CommandBlock
 
 
 ################ HIVE GATHERING ################
-$DefenderDisabled = ((Get-MpPreference).DisableRealtimeMonitoring)
-if ( $DefenderDisabled -eq $false ){
+if ( $ResponseHiveCollect -eq "n" ){
     ScriptEnd
+} 
+elseif ( $ResponseHiveCollect -eq "y" ) {
+    #Empty block to continue
 }
 
 Write-Host "[!] Collecting hives of host" -ForegroundColor Yellow
 
 # Creation of the folder where the logs will be stored
-$Command = { $NoWriteOuput = New-Item -ItemType directory -Path "$PathExtract\HIVES" | Out-String }
+$Command = { New-Item -ItemType directory -Path "$PathExtract\HIVES" | Out-String > $null 2>&1 }
 TryCheck -Command $Command -Log "Creating the destination folder : $PathExtract\HIVES" -IsInformational "no" -IgnoreError "no"
 
 function CollectHive {
@@ -389,7 +418,6 @@ function CollectHive {
     TryCheck -Command $Commands -Log "Collect : $HiveType" -IsInformational "no" -IgnoreError "yes"
 }
 
-
 CollectHive -Hive "HKU\.DEFAULT" -HiveType "DEFAULT.hiv"
 CollectHive -Hive "HKLM\SAM" -HiveType "SAM.hiv"
 CollectHive -Hive "HKLM\Security" -HiveType "Security.hiv"
@@ -401,5 +429,4 @@ CollectHive -Hive "HKEY_CURRENT_USER\Software\Classes" -HiveType "USRCLASS_$User
 Copy-Item -Path "C:\Windows\AppCompat\Programs\Amcache.hve" -Destination "$PathExtract\HIVES\Amcache.hve"
 
 ################ SCRIPT END ################
-
 ScriptEnd
