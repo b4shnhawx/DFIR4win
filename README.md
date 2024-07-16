@@ -6,3 +6,12 @@ You must be clear about the whole process to avoid any data corruption.
 
 The original script belongs to AlrikRr.
 I have tried to optimise, add the function to collect the hives and traded the code.
+
+## Usage
+
+You must have enable the execution of scripts in powershell
+
+```
+Get-ExecutionPolicy -List
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
