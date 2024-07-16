@@ -28,12 +28,12 @@ Write-Host "
    / __ \/ ____/  _/ __ \/ // /_      __(_)___ 
   / / / / /_   / // /_/ / // /| | /| / / / __ \
  / /_/ / __/ _/ // _, _/__  __/ |/ |/ / / / / /
-/_____/_/   /___/_/ |_|  /_/  |__/|__/_/_/ /_/ v1.0
+/_____/_/   /___/_/ |_|  /_/  |__/|__/_/_/ /_/ 
 
 "
 $ErrorActionPreference= 'silentlycontinue'
 
-#Verification of admin
+# Verification of admin
 $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
 
 if ( $IsAdmin -eq $true ){
@@ -44,9 +44,9 @@ else{
     exit
 }
 
-#Verification of Microsoft Defender
+# Verification of Microsoft Defender
 Write-Host "
-[!] To pick up the hives from the system you will need to disable the real-time protection of Microsof Defender.
+[!] To pick up the hives from the system you will need to disable the real-time protection of Microsoft Defender.
 [!] If Microsoft Defender is not disabled, the script will skip the collection of the hives.
 [!] In case you have another antivirus (AV) it is possible that the script will not detect it. Make sure to disable real-time protection.
 [!] If it is another AV and it is not disabled, it is possible that some, but not all, of the hives will be collected. The antivirus will only block the collection of some of the hives, but the script will extract the rest of the information.
@@ -100,7 +100,7 @@ $PathFile = $StorePath + $Hostname + "_" + $Date_ddmmyyyy + ".zip"
 # Point de départ archive
 $PathFilePoint = $PathExtract + "*"
 
-#Get username
+# Get username
 $User = $env:USERNAME
 
 #########################################################################################
@@ -121,19 +121,19 @@ function TryCheck {
 
     if($LASTEXITCODE -eq 0 -or $LASTEXITCODE -eq $null -or $LASTEXITCODE -eq 80){
         if ($IsInformational -eq "no") {
-            Write-Host "[+] ${Log}" -ForegroundColor Green
+            Write-Host "[+] $Log" -ForegroundColor Green
         }
         elseif ($IsInformational -eq "yes") {
-            Write-Host "[!] ${Log}" -ForegroundColor Yellow
+            Write-Host "[!] $Log" -ForegroundColor Yellow
         }
     }
     else{
         if ($IgnoreError -eq "no") {
-            Write-Host "[-] ${Log}" -ForegroundColor Red
+            Write-Host "[-] $Log" -ForegroundColor Red
             exit
         }
         elseif ($IgnoreError -eq "yes") {
-            Write-Host "[-] ${Log}" -ForegroundColor Red
+            Write-Host "[-] $Log" -ForegroundColor Red
         }
     }
 }
@@ -144,8 +144,8 @@ Function CollectEvents{
         [string]$Events,
         [string]$FileName
     )
-    $Command = { .\wevtutil epl "$Events" "${PathExtract}\REGS\${FileName}${FormatFile}.evtx" 2> $null }
-    TryCheck -Command $Command -Log "Collect : ${Events}" -IsInformational "no" -IgnoreError "yes"
+    $Command = { .\wevtutil epl "$Events" "$PathExtract\REGS\$FileName$FormatFile.evtx" 2> $null }
+    TryCheck -Command $Command -Log "Collect : $Events" -IsInformational "no" -IgnoreError "yes"
 }
 
 ################ HOST INFORMATION RECUPERATION ################
@@ -156,11 +156,11 @@ function CollectInfo {
     )
 
     $Commands = {
-        echo "${SeparatorInit}${InfoType}${SeparatorFin}" | Out-File -Append $HostInfoPath
+        echo "$SeparatorInit$InfoType$SeparatorFin" | Out-File -Append $HostInfoPath
         & $CommandBlock | Out-File -Append $HostInfoPath
     }
 
-    TryCheck -Command $Commands -Log "Collect : ${InfoType}" -IsInformational "no" -IgnoreError "yes"
+    TryCheck -Command $Commands -Log "Collect : $InfoType" -IsInformational "no" -IgnoreError "yes"
 }
 
 ################ SCRIPT END ################
@@ -172,20 +172,20 @@ Function ScriptEnd{# Compression in file ZIP
             DestinationPath = $PathFile
         }
         Compress-Archive @compress
-        Write-Host "[+] Archive : "$PathFile -ForegroundColor Green
+        Write-Host "[+] Archive : $PathFile" -ForegroundColor Green
     }
     catch{
-        Write-Host "[-] Archive : "$PathFile -ForegroundColor Red
+        Write-Host "[-] Archive : $PathFile" -ForegroundColor Red
     }
 
-    Delete folder
+    # Delete folder
     try{
         cd ../
         Remove-Item $PathExtract -Recurse -Force -Confirm:$false
-        Write-Host "[+] Supression : "$PathExtract -ForegroundColor Green
+        Write-Host "[+] Supression : $PathExtract" -ForegroundColor Green
     }
     catch{
-        Write-Host "[-] Supression : "$PathExtract -ForegroundColor Red
+        Write-Host "[-] Supression : $PathExtract" -ForegroundColor Red
     }
 
     Write-Host ""
@@ -220,8 +220,8 @@ else{
 }
 
 # Creation of the folder where the logs will be stored
-$Command = { $NoWriteOuput = New-Item -ItemType directory -Path "${PathExtract}" | Out-String }
-TryCheck -Command $Command -Log "Creating the destination folder : ${PathExtract}" -IsInformational "no" -IgnoreError "no"
+$Command = { $NoWriteOuput = New-Item -ItemType directory -Path "$PathExtract" | Out-String }
+TryCheck -Command $Command -Log "Creating the destination folder : $PathExtract" -IsInformational "no" -IgnoreError "no"
 
 
 ################ EVENT COLLECTING ################
@@ -232,8 +232,8 @@ $Command = { cd $PathSystem32 }
 TryCheck -Command $Command -Log "Moving to system32 folder" -IsInformational "yes" -IgnoreError "no"
 
 # Creation of the folder where the logs will be stored
-$Command = { $NoWriteOuput = New-Item -ItemType directory -Path "${PathExtract}REGS" | Out-String }
-TryCheck -Command $Command -Log "Creating the destination folder : ${PathExtract}REGS" -IsInformational "no" -IgnoreError "no"
+$Command = { $NoWriteOuput = New-Item -ItemType directory -Path "$PathExtract\REGS" | Out-String }
+TryCheck -Command $Command -Log "Creating the destination folder : $PathExtract\REGS" -IsInformational "no" -IgnoreError "no"
 
 CollectEvents -Events "Application" -FileName "Application"
 CollectEvents -Events "Security" -FileName "Security"
@@ -264,7 +264,7 @@ $Command = { cd $PathExtract }
 TryCheck -Command $Command -Log "Moving to out path : ${PathExtract}" -IsInformational "yes" -IgnoreError "yes"
 
 $HostInfoPath = "${PathExtract}Host-Info${FormatFile}.txt"
-echo "${SeparatorInit}INDEX HOST INFO COLLECTED${SeparatorFin}
+echo "${SeparatorInit} INDEX HOST INFO COLLECTED ${SeparatorFin}
 - Date
 - Interfaces
 - Netstat port connection
@@ -288,22 +288,21 @@ CollectInfo -InfoType "Date" -CommandBlock $CommandBlock
 
 # Interfaces
 $CommandBlock = {
-    Get-NetIPAddress | Out-String
+    Get-WmiObject Win32_NetworkAdapterConfiguration | Select-Object Description, ServiceName, MACAddress, DHCPEnabled, IPAddress, IPSubnet, DefaultIPGateway, DNSServerSearchOrder, DNSHostName, DNSDomain, DNSDomainSuffixSearchOrder
 }
                                     
 CollectInfo -InfoType "Interfaces" -CommandBlock $CommandBlock
 
 # Netstat port connection
 $CommandBlock = {
-    Get-NetTCPConnection | ft -auto
+    netstat -an
 }
                                                 
 CollectInfo -InfoType "Netstat port connection" -CommandBlock $CommandBlock
 
 # Netstat port connection processes
 $CommandBlock = {
-    $processes = (Get-NetTCPConnection).OwningProcess
-    foreach ($process in $processes) {Get-Process -PID $process | select ID,ProcessName}
+    netstat -anob
 }
                                                 
 CollectInfo -InfoType "Netstat port connection processes" -CommandBlock $CommandBlock
@@ -324,28 +323,28 @@ CollectInfo -InfoType "Services list" -CommandBlock $CommandBlock
 
 # Routes
 $CommandBlock = {
-    Get-NetRoute | ft -auto
+    route print
 }
                                                 
 CollectInfo -InfoType "Routes" -CommandBlock $CommandBlock
 
 # Mounted volumes
 $CommandBlock = {
-    Get-PSDrive | ft -auto
+    Get-WmiObject Win32_LogicalDisk | Select-Object DeviceID, DriveType, ProviderName, VolumeName, FileSystem, Size, FreeSpace
 }
                                                 
 CollectInfo -InfoType "Mounted volumes" -CommandBlock $CommandBlock
 
 # Task Scheduler
 $CommandBlock = {
-    Get-ScheduledTask | ft -auto
+    schtasks /query /fo LIST /v
 }
                                                 
 CollectInfo -InfoType "Task Scheduler" -CommandBlock $CommandBlock
 
 # Shared  SMB volumes
 $CommandBlock = {
-    Get-SmbShare | ft -auto 
+    Get-WmiObject Win32_Share
 }
                                                 
 CollectInfo -InfoType "Shared  SMB volumes" -CommandBlock $CommandBlock
@@ -359,7 +358,7 @@ CollectInfo -InfoType "Command history" -CommandBlock $CommandBlock
 
 # Drivers list
 $CommandBlock = {
-    Get-WindowsDriver –Online -All | ft -auto 
+    Get-WmiObject Win32_PnPSignedDriver | Select-Object DeviceID, Manufacturer, DriverVersion, DriverDate
 }
                                                 
 CollectInfo -InfoType "Drivers list" -CommandBlock $CommandBlock
@@ -374,8 +373,8 @@ if ( $DefenderDisabled -eq $false ){
 Write-Host "[!] Collecting hives of host" -ForegroundColor Yellow
 
 # Creation of the folder where the logs will be stored
-$Command = { $NoWriteOuput = New-Item -ItemType directory -Path "${PathExtract}HIVES" | Out-String }
-TryCheck -Command $Command -Log "Creating the destination folder : ${PathExtract}HIVES" -IsInformational "no" -IgnoreError "no"
+$Command = { $NoWriteOuput = New-Item -ItemType directory -Path "$PathExtract\HIVES" | Out-String }
+TryCheck -Command $Command -Log "Creating the destination folder : $PathExtract\HIVES" -IsInformational "no" -IgnoreError "no"
 
 function CollectHive {
     param (
@@ -384,10 +383,10 @@ function CollectHive {
     )
 
     $Commands = {
-        reg save "${Hive}" "${PathExtract}HIVES\${HiveType}" /y > $null 2>&1
+        reg save "$Hive" "$PathExtract\HIVES\$HiveType" /y > $null 2>&1
     }
 
-    TryCheck -Command $Commands -Log "Collect : ${HiveType}" -IsInformational "no" -IgnoreError "yes"
+    TryCheck -Command $Commands -Log "Collect : $HiveType" -IsInformational "no" -IgnoreError "yes"
 }
 
 
@@ -399,7 +398,7 @@ CollectHive -Hive "HKLM\System" -HiveType "System.hiv"
 CollectHive -Hive "HKEY_CURRENT_USER" -HiveType "NTUSER_$User.DAT"
 CollectHive -Hive "HKEY_CURRENT_USER\Software\Classes" -HiveType "USRCLASS_$User.DAT"
 
-Copy-Item -Path "C:\Windows\AppCompat\Programs\Amcache.hve" -Destination "${PathExtract}HIVES\Amcache.hve"
+Copy-Item -Path "C:\Windows\AppCompat\Programs\Amcache.hve" -Destination "$PathExtract\HIVES\Amcache.hve"
 
 ################ SCRIPT END ################
 
