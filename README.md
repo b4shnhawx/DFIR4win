@@ -15,3 +15,7 @@ You must have enable the execution of scripts in powershell
 Get-ExecutionPolicy -List
 Set-ExecutionPolicy Bypass -Scope CurrentUser
 ```
+Para finalizar es recomendable volver a cambiar la política a 'RemoteSigned'
+```
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
