@@ -13,5 +13,5 @@ You must have enable the execution of scripts in powershell
 
 ```
 Get-ExecutionPolicy -List
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+Set-ExecutionPolicy Bypass -Scope CurrentUser
 ```
