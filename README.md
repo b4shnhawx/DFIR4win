@@ -11,7 +11,7 @@ You must be clear about the whole process to avoid any data corruption.
 The original script belongs to AlrikRr.
 I have tried to optimise, add the function to collect the hives and traded the code.
 
-## Usage
+## USAGE
 This script is capable of automating the collection of much of the data needed to analyse activity on a Windows machine.
 - Relevant info of the host
 - Event logs
@@ -23,7 +23,7 @@ This scripts detects if your active AV its Windows Defender or any other 3rd par
 
 If the script isn’t working properly with the extraction of the hives, extract them manually with any program (as [Registry Explorer](https://ericzimmerman.github.io/#!index.md) from Eric Zimmerman).
 
-### First of all
+### FIRST OF ALL
 You must have enable the execution of scripts in powershell
 
 ```
@@ -35,10 +35,10 @@ Finally, it is advisable to change the policy back to 'RemoteSigned'.
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-### Use
+### USE
 Download the script on the machine you want to collect the artefacts and run it in PowerShell with administrator permissions.
 
-## Tree directory
+## TREE DIRECTORY
 ```
 ./HOST_DD-MM-YYYY.zip
  |
@@ -57,7 +57,7 @@ Download the script on the machine you want to collect the artefacts and run it 
  |-- Host-Info_HOST_DD-MM-YYYY.txt
 ```
 
-## Examples of execution
+## EXAMPLES OF EXECUTION
 - Collection with the AV disabled
   <p align="center">
     <img src="https://github.com/b4shnhawx/DFIR4win/blob/main/img/dfir4win_demo_noav.gif" width="80%">
