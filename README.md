@@ -45,13 +45,13 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ## Examples of execution
 1. Collection with the AV disabled
   <p align="center">
-    <img src="https://github.com/davidahid/Hack-Utils/blob/master/images/banner_menu_0.7.1.png">
+    <img src="https://github.com/b4shnhawx/DFIR4win/blob/main/img/dfir4win_demo_noav.gif">
   </p>
 3. Collection with the AV enabled and try to collect hives
   <p align="center">
-    <img src="https://github.com/davidahid/Hack-Utils/blob/master/images/banner_menu_0.7.1.png">
+    <img src="https://github.com/b4shnhawx/DFIR4win/blob/main/img/dfir4win_demo_avy.gif">
   </p>
 4. Collection with the AV enabled but only collect the regs
   <p align="center">
-    <img src="https://github.com/davidahid/Hack-Utils/blob/master/images/banner_menu_0.7.1.png">
+    <img src="https://github.com/b4shnhawx/DFIR4win/blob/main/img/dfir4win_demo_avn.gif">
   </p>
