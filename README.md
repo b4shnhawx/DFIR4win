@@ -1,5 +1,9 @@
 # DFIR4win
 
+<p align="center">
+  <img src="https://github.com/b4shnhawx/DFIR4win/blob/main/img/dfir4win.png" width="80%">
+</p>
+
 This script automates the collection of data from a host. The script must be run on the host with administrator permissions in order to collect meaningful data in the DFIR process.
 
 You must be clear about the whole process to avoid any data corruption.
@@ -8,6 +12,7 @@ The original script belongs to AlrikRr.
 I have tried to optimise, add the function to collect the hives and traded the code.
 
 ## Usage
+Download the script on the machine you want to collect the artifacts and run it in PowerShell withe admin permissions.
 
 ### Before
 You must have enable the execution of scripts in powershell
