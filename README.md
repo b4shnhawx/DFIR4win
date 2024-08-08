@@ -15,7 +15,7 @@ I have tried to optimise, add the function to collect the hives and traded the c
 This script is capable of automating the collection of much of the data needed to analyse activity on a Windows machine.
 - Relevant info of the host
 - Event logs
-- Registry Hives (for more info https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry-hives)
+- Registry Hives (for more info see [Microsoft documentation](https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry-hives))
 
 In case of the hives extraction, it's possibly you need to disable the real time protection in your antivirus (AV) for considering as souspicious actions. By default, Windows use Windows Defender.
 
