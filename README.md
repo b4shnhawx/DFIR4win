@@ -21,6 +21,7 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 Tree directory:
+```
 ./HOST_DD-MM-YYYY.zip
  |
  |-- REGS
@@ -36,3 +37,4 @@ Tree directory:
  |    |-- Software.hiv
  |
  |-- Host-Info_HOST_DD-MM-YYYY.txt
+```
