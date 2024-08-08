@@ -45,7 +45,7 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ## Examples of execution
 - Collection with the AV disabled
   <p align="center">
-    <img src="https://github.com/b4shnhawx/DFIR4win/blob/main/img/dfir4win_demo_noav.gif" width="50%">
+    <img src="https://github.com/b4shnhawx/DFIR4win/blob/main/img/dfir4win_demo_noav.gif" width="75%">
   </p>
 - Collection with the AV enabled and try to collect hives
   <p align="center">
