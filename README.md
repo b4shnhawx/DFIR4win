@@ -19,3 +19,20 @@ Para finalizar es recomendable volver a cambiar la política a 'RemoteSigned'
 ```
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
+
+Tree directory:
+./HOST_DD-MM-YYYY.zip
+ |
+ |-- REGS
+ |    |-- *_HOST_DD-MM-YYYY.evtx
+ |
+ |-- HIVES
+ |    |-- Security.hiv
+ |    |-- SAM.hiv
+ |    |-- DEFAULT.hiv
+ |    |-- NTUSER_USERNAME.DAT
+ |    |-- System.hiv
+ |    |-- USRCLASS_USERNAME.DAT
+ |    |-- Software.hiv
+ |
+ |-- Host-Info_HOST_DD-MM-YYYY.txt
