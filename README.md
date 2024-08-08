@@ -9,18 +9,21 @@ I have tried to optimise, add the function to collect the hives and traded the c
 
 ## Usage
 
+### Before
 You must have enable the execution of scripts in powershell
 
 ```
 Get-ExecutionPolicy -List
 Set-ExecutionPolicy Bypass -Scope CurrentUser
 ```
-Para finalizar es recomendable volver a cambiar la política a 'RemoteSigned'
+Finally, it is advisable to change the policy back to 'RemoteSigned'.
 ```
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-Tree directory:
+### Use
+
+## Tree directory
 ```
 ./HOST_DD-MM-YYYY.zip
  |
@@ -38,3 +41,8 @@ Tree directory:
  |
  |-- Host-Info_HOST_DD-MM-YYYY.txt
 ```
+
+## Examples of execution
+1. Collection with the AV disabled
+2. Collection with the AV enabled and try to collect hives
+3. Collection with the AV enabled but only collect the regs
