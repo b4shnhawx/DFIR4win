@@ -21,7 +21,7 @@ In case of the hives extraction, it's possibly you need to disable the real time
 
 This scripts detects if your active AV its Windows Defender or any other 3rd party AV. If it is the second case, it is possibly that other modules of your AV blocks the extraction of the hives, so I recommend to check manually if all your needed hives has been extracted properly.
 
-If the script isn`t working properly with the extraction of the hives, extract them manually with any program (as Registry Explorer from https://ericzimmerman.github.io/#!index.md).
+If the script isn’t working properly with the extraction of the hives, extract them manually with any program (as [Registry Explorer](https://ericzimmerman.github.io/#!index.md) from Eric Zimmerman).
 
 ### First of all
 You must have enable the execution of scripts in powershell
