@@ -18,7 +18,9 @@ This script is capable of automating the collection of much of the data needed t
 - Registry Hives (for more info https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry-hives)
 
 In case of the hives extraction, it's possibly you need to disable the real time protection in your antivirus (AV) for considering as souspicious actions. By default, Windows use Windows Defender.
+
 This scripts detects if your active AV its Windows Defender or any other 3rd party AV. If it is the second case, it is possibly that other modules of your AV blocks the extraction of the hives, so I recommend to check manually if all your needed hives has been extracted properly.
+
 If the script isn`t working properly with the extraction of the hives, extract them manually with any program (as Registry Explorer from https://ericzimmerman.github.io/#!index.md).
 
 ### First of all
