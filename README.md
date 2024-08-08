@@ -52,4 +52,4 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
     <img src="https://github.com/b4shnhawx/DFIR4win/blob/main/img/dfir4win_demo_avy.gif">
   </p>
 - Collection with the AV enabled but only collect the regs
-  ![Descripción del GIF]([ruta/al/archivo.gif](https://github.com/b4shnhawx/DFIR4win/blob/main/img/dfir4win_demo_avn.gi)){:width="50%"}
+  ![Descripción del GIF](https://github.com/b4shnhawx/DFIR4win/blob/main/img/dfir4win_demo_avn.gif){:width="50%"}
