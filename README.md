@@ -41,6 +41,7 @@ Download the script on the machine you want to collect the artefacts and run it 
 powershell.exe .\dfir4win.ps1
 ```
 Every step performed by the script will be checked and shows the result in the terminal:
+
 🟢 [+] Operation executed successfully  
 🔴 [-] Operation not executed due to an error  
 🟡 [!] Informational
