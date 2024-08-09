@@ -201,31 +201,32 @@ $User = $env:USERNAME
 # Verification of Microsoft Defender
 Write-Host "
 [!] To pick up the hives from the system you will need to disable the real-time protection of Microsoft Defender.
-[!] If it is another AV and it is not disabled, it is possible that some, but not all, of the hives will be collected. The antivirus will only block the collection of some of the hives, but the script will extract the rest of the information.
+[!] If it is another antivirus (AV) and it is not disabled, it is possible that some, but not all, of the hives will be collected. The AV will only block the collection of some of the hives, but the script will extract the rest of the information.
 [!] If you want to collect ALL hives, be sure to disable protection NOW.
 " -ForegroundColor Yellow
 
 Read-Host "Press ENTER to continue"
 
+# Get if AVservice is running or not. If not, probably there is another 3rd party AV running
+$DefenderService = ((Get-Service -Name WinDefend).Status)
+if ( $DefenderService -eq "Running" ){
+    Write-Host "[+] Microsoft Defender is the default AV" -ForegroundColor Green
+}
+elseif ( $DefenderService -eq "Stopped" ){
+    Write-Host "[-] Microsoft Defender is not the default AV: Make sure you deactivate your AV" -ForegroundColor Red
+}
+else{
+    Write-Host "[-] Microsoft Defender unknown service status" -ForegroundColor Red
+}
+
 # Get if AV is disabled or not
 $DefenderDisabled = ((Get-MpPreference).DisableRealtimeMonitoring)
 if ( $DefenderDisabled -eq $true ){
     Write-Host "[+] Microsoft Defender disabled" -ForegroundColor Green
+    Write-Host ""
 }
 elseif ( $DefenderDisabled -eq $false ){
     Write-Host "[-] Microsoft Defender enabled" -ForegroundColor Red
-}
-
-# Get if AVservice is running or not. If not, probably there is another 3rd party AV running
-$DefenderService = ((Get-Service -Name WinDefend).Status)
-if ( $DefenderService -eq "Running" ){
-    Write-Host "[+] Microsoft Defender is the default antivirus" -ForegroundColor Green
-}
-elseif ( $DefenderService -eq "Stopped" ){
-    Write-Host "[-] Microsoft Defender is not the default antivirus: Ensure tod disable your AV" -ForegroundColor Red
-}
-else{
-    Write-Host "[-] Microsoft Defender unknown service status" -ForegroundColor Red
 }
 
 # If AV is enabled or there is another AV installed, ask if want to extract hives
