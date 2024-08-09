@@ -12,7 +12,7 @@ The original script belongs to AlrikRr.
 I have tried to optimise, add the function to collect the hives and traded the code.
 
 ## USAGE
-This script is capable of automating the collection of much of the data needed to analyse activity on a Windows machine.
+This script is capable of automating the collection of much of the data needed to analyse activity on a Windows machine and compress it in a ZIP file.
 - Relevant info of the host
 - Event logs
 - Registry Hives (for more info see [Microsoft documentation](https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry-hives))
@@ -37,8 +37,36 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ### Use
 Download the script on the machine you want to collect the artefacts and run it in PowerShell with administrator permissions.
+```
+powershell.exe .\dfir4win.ps1
+```
+Every step performed by the script will be checked and shows the result in the terminal:
+<p style="color:green;">[+] Operation executed successfully</p>
+<p style="color:red;">[-] Operation not executed due to an error</p>
+<p style="color:orange;">[!] Informational</p>
 
+Then, the script will ask you for some parameters:
 
+1. Enter the path where you want to save the ZIP with all the data.
+...```
+[!] The extraction will be stored in a folder containing the job name and the current date.
+[!] This folder will then be compressed into a ZIP archive and deleted.
+
+Absolute path where to store the extraction? [ Example = D:\extraction\ ] [ Default = C:\ ] :
+...```
+2. After that, you can decide to disable or not the AV in order to improve the hives collection. When you decide, press ENTER.
+```
+[!] To pick up the hives from the system you will need to disable the real-time protection of Microsoft Defender.
+[!] If it is another AV and it is not disabled, it is possible that some, but not all, of the hives will be collected. The antivirus will only block the collection of some of the hives, but the script will extract the rest of the information.
+[!] If you want to collect ALL hives, be sure to disable protection NOW.
+
+Press ENTER to continue:
+```
+3. In case you decide to mantain enable the AV (or ), the script will ask you to force the hives data collection, or ignore this step.
+```
+Do you want to try to collect as many hives as possible? [ y / n ] :
+```
+4. Finally, the extraction will start.
 
 ## TREE DIRECTORY
 ```
