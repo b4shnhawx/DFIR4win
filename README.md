@@ -23,7 +23,7 @@ This scripts detects if your active AV its Windows Defender or any other 3rd par
 
 If the script isn’t working properly with the extraction of the hives, extract them manually with any program (as [Registry Explorer](https://ericzimmerman.github.io/#!index.md) from Eric Zimmerman).
 
-### ***First of all***
+### First of all
 You must have enable the execution of scripts in powershell
 
 ```
@@ -35,8 +35,10 @@ Finally, it is advisable to change the policy back to 'RemoteSigned'.
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-### ***Use***
+### Use
 Download the script on the machine you want to collect the artefacts and run it in PowerShell with administrator permissions.
+
+
 
 ## TREE DIRECTORY
 ```
