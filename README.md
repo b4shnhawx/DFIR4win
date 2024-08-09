@@ -1,7 +1,5 @@
 # DFIR4win
 
-test
-
 <p align="center">
   <img src="https://github.com/b4shnhawx/DFIR4win/blob/main/img/dfir4win.png" width="95%">
 </p>
