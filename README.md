@@ -41,19 +41,19 @@ Download the script on the machine you want to collect the artefacts and run it 
 powershell.exe .\dfir4win.ps1
 ```
 Every step performed by the script will be checked and shows the result in the terminal:
-<p style="color:green;">[+] Operation executed successfully</p>
-<p style="color:red;">[-] Operation not executed due to an error</p>
-<p style="color:orange;">[!] Informational</p>
+🟢 [+] Operation executed successfully  
+🔴 [-] Operation not executed due to an error  
+🟡 [!] Informational
 
 Then, the script will ask you for some parameters:
 
 1. Enter the path where you want to save the ZIP with all the data.
-...```
+```
 [!] The extraction will be stored in a folder containing the job name and the current date.
 [!] This folder will then be compressed into a ZIP archive and deleted.
 
 Absolute path where to store the extraction? [ Example = D:\extraction\ ] [ Default = C:\ ] :
-...```
+```
 2. After that, you can decide to disable or not the AV in order to improve the hives collection. When you decide, press ENTER.
 ```
 [!] To pick up the hives from the system you will need to disable the real-time protection of Microsoft Defender.
