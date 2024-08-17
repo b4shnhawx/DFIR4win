@@ -63,7 +63,7 @@ Absolute path where to store the extraction? [ Example = D:\extraction\ ] [ Defa
 
 Press ENTER to continue:
 ```
-3. In case you decide to mantain enable the AV (or ), the script will ask you to force the hives data collection, or ignore this step.
+3. In case you decide to mantain enable the AV, the script will ask you to force the hives data collection, or ignore this step.
 ```
 Do you want to try to collect as many hives as possible? [ y / n ] :
 ```
